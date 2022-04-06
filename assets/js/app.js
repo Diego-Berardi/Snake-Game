@@ -2,6 +2,7 @@ const square_div = document.querySelector(".square");
 const restart_btns = document.querySelectorAll(".restart-btn");
 const gameOverMenu_div = document.querySelector(".game-over-menu");
 const score_spans = document.querySelectorAll(".score");
+const maxScore_span = document.querySelector(".max-score");
 
 const squareArr = [];
 let gameStart = false;
@@ -9,8 +10,15 @@ let snake = [];
 snake.push(Math.floor(Math.random() * 400));
 let directionTemp = "n";
 let gameDirection = "n";
-
 let food;
+
+function setMaxScoreInLS(score) {
+  window.localStorage.setItem("maxScore", `${score}`);
+}
+
+function getMaxScore() {
+  return window.localStorage.getItem("maxScore");
+}
 
 for (let i = 0; i < 400; i++) {
   const squareElem_div = document.createElement("div");
@@ -39,11 +47,12 @@ function restart() {
 
   dropFood();
   refresh();
+  score_spans.forEach((elem) => (elem.textContent = snake.length - 1));
 }
 restart();
 
 function dropFood() {
-  if (food) {
+  if (food || food === 0) {
     squareArr[food].classList.remove("isFood");
   }
   let num;
@@ -56,10 +65,15 @@ function dropFood() {
 
 function refresh() {
   squareArr.forEach((elem) => {
-    if (snake.includes(Number(elem.id))) {
+    if (snake.includes(Number(elem.id)) && snake[0] === Number(elem.id)) {
+      elem.classList.add("isSnakeHead");
+    } else if (snake.includes(Number(elem.id))) {
+      elem.classList.remove("isSnakeHead");
+
       elem.classList.add("isSnake");
     } else {
       elem.classList.remove("isSnake");
+      elem.classList.remove("isSnakeHead");
     }
   });
   squareArr[food].classList.add("isFood");
@@ -74,6 +88,10 @@ function gameOver() {
   gameStart = false;
   gameOverMenu_div.classList.add("game-over-active");
   score_spans.forEach((elem) => (elem.textContent = snake.length - 1));
+  if (snake.length - 1 > Number(getMaxScore()) || getMaxScore() === "") {
+    setMaxScoreInLS(`${snake.length - 1}`);
+  }
+  maxScore_span.textContent = Number(getMaxScore())
 }
 
 function checkAte() {
@@ -97,7 +115,7 @@ function moveSnake() {
       else snake[0]--;
       break;
     case "u":
-      if (snake[0] < 0) snake[0] += 400;
+      if (snake[0] - 20 < 0) snake[0] += 380;
       else snake[0] -= 20;
       break;
     case "r":
@@ -106,7 +124,7 @@ function moveSnake() {
       else snake[0]++;
       break;
     case "d":
-      if (snake[0] > 399) snake[0] -= 400;
+      if (snake[0] + 20 > 399) snake[0] -= 380;
       else snake[0] += 20;
       break;
   }

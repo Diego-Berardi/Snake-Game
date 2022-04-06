@@ -10,11 +10,13 @@
 
 :root {
   font-size: 23px;
+  --backGround-color: #222738;
+  --board-bg-color: #181825;
 }
 
 body {
   font-family: "Roboto", sans-serif;
-  background-color: #222738;
+  background-color: var(--backGround-color);
   color: white;
 }
 
@@ -44,15 +46,27 @@ h1 {
 .square-elem {
   width: 1rem;
   height: 1rem;
-  background-color: #181825;;
+  background-color: var(--board-bg-color);
 }
 
 .isSnake {
-  background-color: rgba(218, 218, 218, 0.775);
+  background-color: #eeeeeebb;
+  border-radius: 1px;
+  z-index: 2;
+}
+
+.isSnakeHead {
+  background-color: #ffffff;
+  border-radius: 1px;
+  box-shadow: 0 0 2px 0 #ffffff;
+  z-index: 3;
 }
 .isFood {
-  background-color: #00fffb;
-  box-shadow: 0 0 15px 0  #00fffb;
+  background-color: #4cffd7;
+  border-radius: 2px;
+
+  box-shadow: 0 0 15px 0 #4cffd7;
+  z-index: 2;
 }
 
 .game-over-menu {
@@ -61,15 +75,24 @@ h1 {
   align-items: center;
   flex-direction: column;
   gap: 1rem;
-
+  color: #4cffd7 !important;
 
   position: absolute;
   top: 0;
   bottom: 0;
   right: 0;
   left: 0;
-  background-color: #181825;
+  background-color: var(--board-bg-color);
+  
 }
+.game-over-menu h2,
+.game-over-menu p{
+  border-radius: 10px;
+  background-color: #1818258e;
+
+  z-index: 5;
+}
+
 
 .game-over-active {
   display: flex;
@@ -85,8 +108,17 @@ h1 {
 
 .restart-btn {
   background-color: transparent;
-  padding: .3rem .9rem;
+  padding: 0.3rem 0.9rem;
   color: white;
   border: 1px solid white;
   border-radius: 10px;
+  transition: color 150ms ease-in-out, background-color 150ms ease-in-out,
+    border 150ms ease-in-out;
+}
+
+.restart-btn:hover {
+  color: var(--backGround-color);
+  border: 1px solid #4cffd7;
+  background-color: #4cffd7;
+
 }
